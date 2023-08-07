@@ -29,7 +29,7 @@ pipeline {
       steps {
         // Build the Docker image for the web app
         script {
-          docker.build("webapp:${env.BUILD_NUMBER}")
+          dockerImage = docker.build("webapp:${env.BUILD_NUMBER}")
         }
         
         // Tag the Docker image for GCR
@@ -55,7 +55,7 @@ pipeline {
     always {
       // Clean up the Docker image after the deployment
       script {
-        docker.image("webapp:${env.BUILD_NUMBER}").remove()
+        dockerImage.remove()
       }
     }
     success {
