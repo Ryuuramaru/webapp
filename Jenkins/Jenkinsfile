@@ -7,6 +7,7 @@ pipeline {
     // For demonstration purposes, we are defining sample environment variables here.
     API_KEY = credentials('AIzaSyCufNpGA1BRPkBWt0VWmMwVvoEbkaSdvYA')
     DATABASE_URL = credentials('35.246.177.84')
+    DOCKER_IMAGE_TAG = "webapp:${env.BUILD_NUMBER}"
   }
   
   stages {
@@ -29,7 +30,7 @@ pipeline {
       steps {
         // Build the Docker image for the web app
         script {
-          env.DOCKER_IMAGE_TAG = "webapp:${env.BUILD_NUMBER}"
+
           docker.build(env.DOCKER_IMAGE_TAG)
         }
         
