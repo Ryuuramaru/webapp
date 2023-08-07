@@ -5,8 +5,8 @@ pipeline {
     // Define environment variables for your project (e.g., API_KEY, DATABASE_URL, etc.)
     // These variables should be stored securely using Jenkins credentials.
     // For demonstration purposes, we are defining sample environment variables here.
-    API_KEY = credentials('api-key')
-    DATABASE_URL = credentials('db-url')
+    API_KEY = credentials('AIzaSyCufNpGA1BRPkBWt0VWmMwVvoEbkaSdvYA')
+    DATABASE_URL = credentials('35.246.177.84')
   }
   
   stages {
