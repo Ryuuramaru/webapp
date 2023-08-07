@@ -1,0 +1,71 @@
+pipeline {
+  agent any
+  
+  environment {
+    // Define environment variables for your project (e.g., API_KEY, DATABASE_URL, etc.)
+    // These variables should be stored securely using Jenkins credentials.
+    // For demonstration purposes, we are defining sample environment variables here.
+    API_KEY = credentials('api-key')
+    DATABASE_URL = credentials('db-url')
+  }
+  
+  stages {
+    stage('Build') {
+      steps {
+        // Checkout the source code from the version control repository (e.g., Git)
+        git url: 'https://github.com/Ryuuramaru/webapp.git'
+        
+        // Install dependencies and build the web app
+        sh 'npm install'
+        sh 'npm run build'
+        
+        // Optionally, you can run tests here
+        // sh 'npm test'
+      }
+    }
+    
+    stage('Containerize') {
+      steps {
+        // Build the Docker image for the web app
+        script {
+          docker.build("webapp:${env.BUILD_NUMBER}")
+        }
+        
+        // Tag the Docker image for GCR
+        script {
+          docker.withRegistry('https://gcr.io', 'gcr-credentials') {
+            docker.image("webapp:${env.BUILD_NUMBER}").push("latest")
+          }
+        }
+      }
+    }
+    
+    stage('Deploy') {
+      steps {
+        // Deploy the web app to GKE using Ansible
+        // Assuming you have an Ansible playbook for deploying Kubernetes resources.
+        // Make sure to set up Ansible in your Jenkins environment and provide the necessary credentials.
+        ansiblePlaybook(playbook: 'deploy-web-app.yaml')
+      }
+    }
+  }
+  
+  post {
+    always {
+      // Clean up the Docker image after the deployment
+      script {
+        docker.image("webapp:${env.BUILD_NUMBER}").remove()
+      }
+    }
+    success {
+      // Optionally, notify on success
+      // You can use Slack, email, or any other notification method.
+      echo 'Deployment successful! Notify your team.'
+    }
+    failure {
+      // Optionally, notify on failure
+      // You can use Slack, email, or any other notification method.
+      echo 'Deployment failed! Notify your team.'
+    }
+  }
+}

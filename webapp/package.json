@@ -1,0 +1,22 @@
+{
+    "name": "my-web-app",
+    "version": "1.0.0",
+    "description": "A simple web app built with Node.js",
+    "main": "nodejs-hello-web.js",
+    "scripts": {
+      "start": "node nodejs-hello-web.js",
+      "test": "jest",
+      "build": "webpack"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+      "jest": "^27.1.1",
+      "webpack": "^5.50.0"
+    },
+    "author": "Matei Rosu",
+    "license": "MIT"
+  }
+  
