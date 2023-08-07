@@ -57,7 +57,8 @@ pipeline {
     always {
       // Clean up the Docker image after the deployment
       script {
-        docker.image(env.DOCKER_IMAGE_TAG).remove()
+        //docker.image(env.DOCKER_IMAGE_TAG).remove() 
+        //bugged at the moment
       }
     }
     success {
