@@ -18,7 +18,6 @@ pipeline {
 
     stage('Build') {
       steps {
-        
         // Install dependencies and build the web app
         dir('webapp') {
           sh 'npm install'
@@ -29,7 +28,6 @@ pipeline {
         // Optionally, you can run tests here
         //sh 'npm test'
       }
-    }
     
     stage('Containerize') {
       steps {
@@ -73,3 +71,5 @@ pipeline {
     }
   }
 }
+}
+
