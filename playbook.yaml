@@ -21,7 +21,7 @@
         regexp: "(your-docker-image-name):.*$"
         replace: "\\1:{{ image_tag }}"
       with_fileglob:
-        - "/tmp/k8s/*.yaml"
+        - "*.yaml"
 
     - name: Apply Kubernetes YAML files
       command: kubectl apply -f "/tmp/k8s/{{ item }}"
