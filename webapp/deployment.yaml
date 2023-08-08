@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: webapp-container
-          image: gcr.io/metal-filament-395208/webapp:{{ .Values.imageTag }}
+          image: gcr.io/metal-filament-395208/webapp:$(IMAGE_TAG)
           ports:
             - containerPort: 80
           # Add other container settings as needed

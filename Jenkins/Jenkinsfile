@@ -48,6 +48,7 @@ pipeline {
     stage('Deploy') {
       steps {
         // Deploy the Docker image to the Kubernetes cluster
+        sh "kubectl create configmap myapp-config --from-literal=IMAGE_TAG=${env.BUILD_NUMBER} -n ${K8S_NAMESPACE}"
         sh 'kubectl apply -f webapp/deployment.yaml'
       }
     }  
