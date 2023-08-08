@@ -50,26 +50,6 @@ pipeline {
         sh 'kubectl apply -f webapp/deployment.yaml'
       }
     }  
-  
-  post {
-    /*always {
-      // Clean up the Docker image after the deployment
-      script {
-        //docker.image(env.DOCKER_IMAGE_TAG).remove() 
-        //bugged at the moment
-      }
-    }*/
-    success {
-      // Optionally, notify on success
-      // You can use Slack, email, or any other notification method.
-      echo 'Deployment successful! Notify your team.'
-    }
-    failure {
-      // Optionally, notify on failure
-      // You can use Slack, email, or any other notification method.
-      echo 'Deployment failed! Notify your team.'
-    }
   }
-}
 }
 
