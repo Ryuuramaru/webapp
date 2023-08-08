@@ -54,13 +54,13 @@ pipeline {
   }
   
   post {
-    always {
+    /*always {
       // Clean up the Docker image after the deployment
       script {
         //docker.image(env.DOCKER_IMAGE_TAG).remove() 
         //bugged at the moment
       }
-    }
+    }*/
     success {
       // Optionally, notify on success
       // You can use Slack, email, or any other notification method.

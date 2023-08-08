@@ -10,6 +10,12 @@ resource "google_sql_database_instance" "instance" {
   database_version = "MYSQL_8_0"
   settings {
     tier = "db-f1-micro"
+
+    //backup
+    backup_configuration {
+      enabled = true
+      start_time = "00:00"
+    }
   }
 
   deletion_protection  = "true"
