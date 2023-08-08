@@ -17,4 +17,7 @@ spec:
           image: gcr.io/metal-filament-395208/webapp:$(IMAGE_TAG)
           ports:
             - containerPort: 80
+          env:
+            - name: IMAGE_TAG
+              value: $(IMAGE_TAG)
           # Add other container settings as needed

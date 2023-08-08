@@ -4,7 +4,7 @@ pipeline {
   environment {
     //API_KEY = credentials('AIzaSyCufNpGA1BRPkBWt0VWmMwVvoEbkaSdvYA')
     //DATABASE_URL = credentials('35.246.177.84')
-    IMAGE_TAG = "${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
   
   stages {
@@ -48,7 +48,6 @@ pipeline {
     stage('Deploy') {
       steps {
         // Deploy the Docker image to the Kubernetes cluster
-        sh "kubectl create configmap myapp-config --from-literal=IMAGE_TAG=${env.BUILD_NUMBER} -n ${K8S_NAMESPACE}"
         sh 'kubectl apply -f webapp/deployment.yaml'
       }
     }  
