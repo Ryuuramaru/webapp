@@ -24,7 +24,7 @@
     - name: Substitute image tag in Kubernetes YAML files
       replace:
         path: "{{ item.path }}"
-        regexp: "(your-docker-image-name):.*$"
+        regexp: "(webapp):.*$"
         replace: "\\1:{{ image_tag }}"
       loop: "{{ yaml_files.files }}"
 
