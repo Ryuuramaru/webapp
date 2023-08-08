@@ -21,9 +21,8 @@ pipeline {
         
         // Install dependencies and build the web app
         dir('webapp') {
-          NodeJS {
-            sh 'npm install'
-            sh 'npm run build'
+          sh 'npm install'
+          sh 'npm run build'
           }
         }
         
