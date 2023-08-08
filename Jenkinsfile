@@ -47,11 +47,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        ansiblePlaybook(
-                        playbook: "./playbook.yaml",
-                        //inventory: '/path/to/ansible/hosts', // Optional, specify inventory file if needed
-                        extras: "-e image_tag=${env.BUILD_NUMBER}"
-                    )
+        sh "ansible-playbook -i ansible/hosts playbook.yaml -e image_tag=${env.BUILD_NUMBER}"
       }
     }  
   }
