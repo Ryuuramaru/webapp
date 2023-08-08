@@ -15,15 +15,19 @@
       with_fileglob:
         - "webapp/*.yaml"
 
+    - name: Find YAML files for substitution
+      find:
+        paths: "/tmp/k8s/"
+        patterns: "*.yaml"
+      register: yaml_files
+
     - name: Substitute image tag in Kubernetes YAML files
       replace:
-        path: "/tmp/k8s/{{ item }}"
+        path: "{{ item.path }}"
         regexp: "(your-docker-image-name):.*$"
         replace: "\\1:{{ image_tag }}"
-      with_fileglob:
-        - "*.yaml"
+      loop: "{{ yaml_files.files }}"
 
     - name: Apply Kubernetes YAML files
-      command: kubectl apply -f "/tmp/k8s/{{ item }}"
-      with_fileglob:
-        - "/tmp/k8s/*.yaml"
+      command: kubectl apply -f "{{ item.path }}"
+      loop: "{{ yaml_files.files }}"
