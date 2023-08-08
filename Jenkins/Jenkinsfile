@@ -4,7 +4,7 @@ pipeline {
   environment {
     //API_KEY = credentials('AIzaSyCufNpGA1BRPkBWt0VWmMwVvoEbkaSdvYA')
     //DATABASE_URL = credentials('35.246.177.84')
-    env.IMAGE_TAG = "${env.BUILD_NUMBER}"
+    IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
   
   stages {
