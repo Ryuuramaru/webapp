@@ -13,10 +13,10 @@ resource "google_sql_database_instance" "instance" {
 
     //backup
     backup_configuration {
-      enabled = true
+      enabled    = true
       start_time = "00:00"
     }
   }
 
-  deletion_protection  = "true"
+  deletion_protection = "true"
 }

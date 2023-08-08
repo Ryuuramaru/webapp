@@ -21,7 +21,10 @@ pipeline {
         
         // Install dependencies and build the web app
         dir('webapp') {
-          sh 'npm install'
+          NodeJS {
+            sh 'npm install'
+            sh 'npm run build'
+          }
         }
         
         // Optionally, you can run tests here
@@ -47,7 +50,7 @@ pipeline {
     stage('Deploy') {
       steps {
         // Deploy the Docker image to the Kubernetes cluster
-        sh 'kubectl apply -f deployment.yaml'
+        sh 'kubectl apply -f webapp/deployment.yaml'
       }
     }  
   }
