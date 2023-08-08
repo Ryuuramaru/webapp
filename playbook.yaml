@@ -1,0 +1,29 @@
+---
+- name: Deploy Node.js App to Kubernetes
+  hosts: localhost
+  gather_facts: false
+  vars:
+    image_tag: "{{ BUILD_NUMBER }}"
+    docker_image: "webapp"
+
+
+  tasks:
+    - name: Copy Kubernetes YAML files
+      copy:
+        src: "{{ item }}"
+        dest: "/tmp/k8s/"
+      with_fileglob:
+        - "webapp/*.yaml"
+
+    - name: Substitute image tag in Kubernetes YAML files
+      replace:
+        path: "/tmp/k8s/{{ item }}"
+        regexp: "(your-docker-image-name):.*$"
+        replace: "\\1:{{ image_tag }}"
+      with_fileglob:
+        - "/tmp/k8s/*.yaml"
+
+    - name: Apply Kubernetes YAML files
+      command: kubectl apply -f "/tmp/k8s/{{ item }}"
+      with_fileglob:
+        - "/tmp/k8s/*.yaml"
