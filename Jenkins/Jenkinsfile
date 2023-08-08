@@ -17,9 +17,10 @@ pipeline {
         git url: 'https://github.com/Ryuuramaru/webapp.git'
         
         // Install dependencies and build the web app
-        sh 'cd webapp'
-        sh 'npm install'
-        sh 'npm run build'
+        dir('webapp') {
+          sh 'npm install'
+          sh 'npm run build'
+        }
         
         // Optionally, you can run tests here
         sh 'npm test'
