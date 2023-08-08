@@ -52,7 +52,6 @@ pipeline {
         sh 'kubectl apply -f webapp/deployment.yaml'
       }
     }  
-  }
   
   post {
     /*always {
