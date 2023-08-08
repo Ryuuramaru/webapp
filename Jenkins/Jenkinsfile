@@ -31,8 +31,9 @@ pipeline {
     
     stage('Containerize') {
       steps {
+        
         // Build the Docker image for the web app
-        sh "docker build -t webapp:${IMAGE_TAG} ."
+        sh "docker build -t webapp:${IMAGE_TAG} ./webapp"
       }
     }
 
