@@ -11,10 +11,16 @@ pipeline {
   }
   
   stages {
+
+    stage('Checkout') {
+            steps {
+                // Cloning the repository into the workspace
+                git branch: 'main', url: 'https://github.com/Ryuuramaru/webapp.git'
+            }
+    }
+
     stage('Build') {
       steps {
-        // Checkout the source code from the version control repository (e.g., Git)
-        git url: 'https://github.com/Ryuuramaru/webapp.git'
         
         // Install dependencies and build the web app
         dir('webapp') {
