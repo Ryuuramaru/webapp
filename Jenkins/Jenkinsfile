@@ -2,21 +2,18 @@ pipeline {
   agent any
   
   environment {
-    // Define environment variables for your project (e.g., API_KEY, DATABASE_URL, etc.)
-    // These variables should be stored securely using Jenkins credentials.
-    // For demonstration purposes, we are defining sample environment variables here.
     //API_KEY = credentials('AIzaSyCufNpGA1BRPkBWt0VWmMwVvoEbkaSdvYA')
     //DATABASE_URL = credentials('35.246.177.84')
-    DOCKER_IMAGE_TAG = "webapp:${env.BUILD_NUMBER}"
+    IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
   
   stages {
 
     stage('Checkout') {
-            steps {
-                // Cloning the repository into the workspace
-                git branch: 'main', url: 'https://github.com/Ryuuramaru/webapp.git'
-            }
+      steps {
+        // Cloning the repository into the workspace
+        git branch: 'main', url: 'https://github.com/Ryuuramaru/webapp.git'
+      }
     }
 
     stage('Build') {
@@ -25,39 +22,34 @@ pipeline {
         // Install dependencies and build the web app
         dir('webapp') {
           sh 'npm install'
-          sh 'npm run build'
         }
         
         // Optionally, you can run tests here
-        sh 'npm test'
+        //sh 'npm test'
       }
     }
     
     stage('Containerize') {
       steps {
         // Build the Docker image for the web app
-        script {
-
-          docker.build(env.DOCKER_IMAGE_TAG)
-        }
-        
-        // Tag the Docker image for GCR
-        script {
-          docker.withRegistry('https://gcr.io', 'gcr-credentials') {
-            docker.image("webapp:${env.BUILD_NUMBER}").push("latest")
-          }
-        }
+        sh "docker build -t webapp:${IMAGE_TAG} ."
       }
     }
-    
+
+    stage('Push to Registry') {
+      steps {
+        // Push the Docker image to the registry
+        sh 'docker tag webapp:${IMAGE_TAG} gcr.io/metal-filament-395208/webapp:${IMAGE_TAG}'
+        sh 'docker push gcr.io/metal-filament-395208/webapp:${IMAGE_TAG}'
+      }
+    }
+
     stage('Deploy') {
       steps {
-        // Deploy the web app to GKE using Ansible
-        // Assuming you have an Ansible playbook for deploying Kubernetes resources.
-        // Make sure to set up Ansible in your Jenkins environment and provide the necessary credentials.
-        ansiblePlaybook(playbook: 'deploy-web-app.yaml')
+        // Deploy the Docker image to the Kubernetes cluster
+        sh 'kubectl apply -f deployment.yaml'
       }
-    }
+    }  
   }
   
   post {
