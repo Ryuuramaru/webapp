@@ -21,21 +21,9 @@ resource "google_compute_instance" "jenkins_vm" {
 
   metadata_startup_script = <<-EOT
     #!/bin/bash
+    sudo su
     apt-get update
-    apt-get upgrade -y
-    apt install default-jre  # Install Java (if not already installed)
-    wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-    sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-    apt update
-    apt install jenkins
-    apt-get install -y lsb-release
-    curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
-    https://download.docker.com/linux/debian/gpg
-    echo "deb [arch=$(dpkg --print-architecture) \
-    signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
-    https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-    apt-get update && apt-get install -y --fix-missing git nodejs npm docker-ce python3 python3-pip software-properties-common
-    pip install ansible
+    apt upgrade -y
+    jenkins --httpPort=8089
     EOT
 }

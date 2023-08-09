@@ -1,0 +1,40 @@
+resource "google_compute_global_forwarding_rule" "my_lb" {
+  name       = "my-lb"
+  target     = google_container_cluster.primary.endpoint
+  port_range = "80"
+  ip_address = "0.0.0.0" # You can specify a static IP address if needed
+}
+
+resource "google_compute_target_http_proxy" "my_proxy" {
+  name    = "my-proxy"
+  url_map = google_compute_url_map.my_url_map.self_link
+}
+
+resource "google_compute_url_map" "my_url_map" {
+  name = "my-url-map"
+  default_url_redirect {
+    https_redirect = true
+    strip_query    = false
+  }
+}
+
+resource "google_compute_backend_service" "my_backend_service" {
+  name        = "my-backend-service"
+  protocol    = "HTTP"
+  port_name   = google_container_cluster.primary.master_auth[0].cluster_ca_certificate
+  timeout_sec = 10
+
+  backend {
+    group = google_container_cluster.primary.instance_group_urls[0]
+  }
+
+  health_checks = [google_compute_http_health_check.my_health_check.id]
+}
+
+resource "google_compute_http_health_check" "my_health_check" {
+  name               = "my-health-check"
+  request_path       = "/"
+  port               = "80"
+  check_interval_sec = 5
+  timeout_sec        = 5
+}
